@@ -1,15 +1,15 @@
-import { TaskService } from '@/services/task.service';
+import { TasksService } from '@/services/tasks.service';
 import express from 'express';
 
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const response = await TaskService.create();
+    const response = await TasksService.create();
     res.json(response);
 });
 
 router.get('/', async (req, res) => {
-    const response = await TaskService.readAll();
+    const response = await TasksService.readAll();
     res.json(response);
 });
 
