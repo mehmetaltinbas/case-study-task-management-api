@@ -26,7 +26,7 @@ router.post('/sign-in', validateDto(SignInUserDto), async (req, res) => {
         return;
     }
 
-    res.cookie('jwt', response.jwt, {
+    res.cookie(jwtCookieSettings.name, response.jwt, {
         maxAge: jwtCookieSettings.maxAge,
         secure: jwtCookieSettings.isSecure,
         httpOnly: jwtCookieSettings.isHttpOnly,

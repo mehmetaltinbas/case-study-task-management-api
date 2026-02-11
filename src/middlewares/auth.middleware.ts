@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
 
 export function authorizationMiddleware(req: Request, res: Response, next: NextFunction): void {
-    let token = req.cookies.jwt;
+    let token = req.cookies[jwtCookieSettings.name];
 
     if (!token) {
         const authHeader = req.headers.authorization;

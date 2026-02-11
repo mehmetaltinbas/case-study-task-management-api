@@ -8,6 +8,21 @@ export class TasksService {
 
     static async create(userId: string, dto: CreateClassDto): Promise<ResponseBase> {
         try {
+            const existingTask = await prisma.task.findFirst({
+                where: {
+                    userId,
+                    title: dto.title
+                }
+            });
+
+            if (existingTask) {
+                return {
+                    isSuccess: false,
+                    message: `a task with given title ${dto.title} already exists`,
+                    statusCode: 409
+                };
+            }
+
             await prisma.task.create({
                 data: {
                     userId,
@@ -15,7 +30,7 @@ export class TasksService {
                 }
             });
             
-            return { isSuccess: true, message: 'task created', statusCode: 200 };
+            return { isSuccess: true, message: 'task created', statusCode: 201 };
         } catch (error) {
             console.error(error);
             return { isSuccess: false, message: 'internal server error', statusCode: 500 };
