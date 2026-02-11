@@ -1,8 +1,10 @@
 import { jwtCookieSettings } from '@/constants/jwt-cookie-settings.constant';
+import { authorizationMiddleware } from '@/middlewares/auth.middleware';
 import { validateDto } from '@/middlewares/validate-dto.middleware';
 import { UsersService } from '@/services/users.service';
 import { SignInUserDto } from '@/types/dto/users/sign-in-user.dto';
 import { SignUpUserDto } from '@/types/dto/users/sign-up-user.dto';
+import { UpdateUserDto } from '@/types/dto/users/update-user.dto';
 import { ResponseBase } from '@/types/response/response-base.response';
 import express from 'express';
 
@@ -40,6 +42,24 @@ router.post('/sign-in', validateDto(SignInUserDto), async (req, res) => {
     };
 
     res.status(response.statusCode).json(responseBase);
+});
+
+router.patch('/', authorizationMiddleware, validateDto(UpdateUserDto), async (req, res) => {
+    const userId = req.userId!;
+
+    const dto: UpdateUserDto = req.body;
+
+    const response = await UsersService.updateById(userId, dto);
+
+    res.status(response.statusCode).json(response);
+});
+
+router.delete('/', authorizationMiddleware, async (req, res) => {
+    const userId = req.userId!;
+
+    const response = await UsersService.deleteById(userId);
+
+    res.status(response.statusCode).json(response);
 });
 
 export default router;
