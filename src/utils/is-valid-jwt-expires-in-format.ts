@@ -1,4 +1,7 @@
-export function parseJwtExpiresIn(value: string | undefined): { expiresIn: string; maxAge: number } {
+export function parseJwtExpiresIn(value: string | undefined): {
+    expiresIn: string;
+    maxAge: number;
+} {
     const defaultValue = '24h';
     const validated = value && /^\d+[smhd]$/.test(value) ? value : defaultValue;
 
@@ -8,21 +11,21 @@ export function parseJwtExpiresIn(value: string | undefined): { expiresIn: strin
     if (match) {
         const [, num, unit] = match;
         const numValue = parseInt(num);
-        
+
         switch (unit) {
-            case 's': 
+            case 's':
                 milliseconds = numValue * 1000;
                 break;
-            case 'm': 
+            case 'm':
                 milliseconds = numValue * 60 * 1000;
                 break;
-            case 'h': 
+            case 'h':
                 milliseconds = numValue * 60 * 60 * 1000;
                 break;
-            case 'd': 
+            case 'd':
                 milliseconds = numValue * 24 * 60 * 60 * 1000;
                 break;
-            default: 
+            default:
                 milliseconds = 24 * 60 * 60 * 1000;
         }
     } else {
@@ -31,6 +34,6 @@ export function parseJwtExpiresIn(value: string | undefined): { expiresIn: strin
 
     return {
         expiresIn: validated,
-        maxAge: milliseconds
+        maxAge: milliseconds,
     };
 }

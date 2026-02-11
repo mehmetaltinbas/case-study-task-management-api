@@ -18,24 +18,21 @@ export function authorizationMiddleware(req: Request, res: Response, next: NextF
         res.status(401).json({
             isSuccess: false,
             message: 'authentication required, no token provided',
-            statusCode: 401
+            statusCode: 401,
         } as ResponseBase);
         return;
     }
 
     try {
-        const decoded = jsonwebtoken.verify(
-            token,
-            jwtCookieSettings.secret
-        ) as DecodedJwtPayload;
-        
+        const decoded = jsonwebtoken.verify(token, jwtCookieSettings.secret) as DecodedJwtPayload;
+
         req.userId = decoded.userId;
         next();
     } catch (error) {
         res.status(401).json({
             isSuccess: false,
             message: 'invalid or expired token.',
-            statusCode: 401
+            statusCode: 401,
         } as ResponseBase);
         return;
     }

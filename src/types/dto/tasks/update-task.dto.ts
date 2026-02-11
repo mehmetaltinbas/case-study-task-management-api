@@ -1,6 +1,6 @@
 import { IsBoolean, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
-export class CreateTaskDto {
+export class UpdateTaskDto {
     @MinLength(2)
     @IsString()
     @IsNotEmpty()

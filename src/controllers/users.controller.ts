@@ -30,13 +30,13 @@ router.post('/sign-in', validateDto(SignInUserDto), async (req, res) => {
         maxAge: jwtCookieSettings.maxAge,
         secure: jwtCookieSettings.isSecure,
         httpOnly: jwtCookieSettings.isHttpOnly,
-        sameSite: jwtCookieSettings.sameSite
+        sameSite: jwtCookieSettings.sameSite,
     });
 
     const responseBase: ResponseBase = {
         isSuccess: response.isSuccess,
         message: response.message,
-        statusCode: response.statusCode
+        statusCode: response.statusCode,
     };
 
     res.status(response.statusCode).json(responseBase);

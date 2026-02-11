@@ -20,8 +20,8 @@ export class UsersService {
             await prisma.user.create({
                 data: {
                     ...dtoWithoutPassword,
-                    passwordHash
-                }
+                    passwordHash,
+                },
             });
 
             return { isSuccess: true, message: 'signed up', statusCode: 200 };
@@ -34,11 +34,15 @@ export class UsersService {
     static async signIn(dto: SignInUserDto): Promise<SignInUserResponse> {
         try {
             const user = await prisma.user.findUnique({
-                where: { userName: dto.userName }
+                where: { userName: dto.userName },
             });
 
             if (!user) {
-                return { isSuccess: false, message: 'no user found by given userName', statusCode: 401 };
+                return {
+                    isSuccess: false,
+                    message: 'no user found by given userName',
+                    statusCode: 401,
+                };
             }
 
             const isPasswordValid = bcrypt.compareSync(dto.password, user.passwordHash);
