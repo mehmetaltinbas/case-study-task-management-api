@@ -1,6 +1,7 @@
 import { jwtCookieSettings } from '@/constants/jwt-cookie-settings.constant';
 import { SignInUserDto } from '@/types/dto/users/sign-in-user.dto';
 import { SignUpUserDto } from '@/types/dto/users/sign-up-user.dto';
+import { DecodedJwtPayload } from '@/types/jwt-payload.interface';
 import { ResponseBase } from '@/types/response/response-base.response';
 import { SignInUserResponse } from '@/types/response/sign-in-user.response';
 import bcrypt from 'bcrypt';
@@ -47,7 +48,7 @@ export class UsersService {
             }
 
             const jwt = jsonwebtoken.sign(
-                { id: user.id, userName: user.userName },
+                { userId: user.id, userName: user.userName } as DecodedJwtPayload,
                 jwtCookieSettings.secret,
                 { expiresIn: jwtCookieSettings.expiresIn as any }
             );

@@ -1,5 +1,5 @@
 import { jwtCookieSettings } from '@/constants/jwt-cookie-settings.constant';
-import { validateDto } from '@/middlewares/src/middlewares/validate-dto.middleware';
+import { validateDto } from '@/middlewares/validate-dto.middleware';
 import { UsersService } from '@/services/users.service';
 import { SignInUserDto } from '@/types/dto/users/sign-in-user.dto';
 import { SignUpUserDto } from '@/types/dto/users/sign-up-user.dto';
@@ -27,7 +27,7 @@ router.post('/sign-in', validateDto(SignInUserDto), async (req, res) => {
     }
 
     res.cookie('jwt', response.jwt, {
-        maxAge: jwtCookieSettings.expiresIn as number,
+        maxAge: jwtCookieSettings.maxAge,
         secure: jwtCookieSettings.isSecure,
         httpOnly: jwtCookieSettings.isHttpOnly,
         sameSite: jwtCookieSettings.sameSite

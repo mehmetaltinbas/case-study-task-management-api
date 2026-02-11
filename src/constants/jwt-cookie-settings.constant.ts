@@ -1,8 +1,11 @@
-import { isValidTimeFormat } from '@/utils/is-valid-jwt-expires-in-format';
+import { parseJwtExpiresIn } from '@/utils/is-valid-jwt-expires-in-format';
+
+const parsed = parseJwtExpiresIn(process.env.JWT_EXPIRES_IN);
 
 export const jwtCookieSettings = {
     secret: process.env.JWT_SECRET ?? 'jwt-secret',
-    expiresIn: isValidTimeFormat(process.env.JWT_EXPIRES_IN),
+    expiresIn: parsed.expiresIn,
+    maxAge: parsed.maxAge,
     isSecure: process.env.NODE_ENV === 'production' ? true : false,
     isHttpOnly: true,
     sameSite: 'lax' as 'lax' | 'strict' | 'none',

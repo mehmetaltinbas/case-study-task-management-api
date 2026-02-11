@@ -1,12 +1,13 @@
-import { validateDto } from '@/middlewares/src/middlewares/validate-dto.middleware';
+import { authorizationMiddleware } from '@/middlewares/auth.middleware';
+import { validateDto } from '@/middlewares/validate-dto.middleware';
 import { TasksService } from '@/services/tasks.service';
 import { CreateClassDto } from '@/types/dto/tasks/create-task.dto';
 import express from 'express';
 
 const router = express.Router();
 
-router.post('/', validateDto(CreateClassDto), async (req, res) => {
-    const userId = '';
+router.post('/', authorizationMiddleware, validateDto(CreateClassDto), async (req, res) => {
+    const userId = req.userId!;
 
     const dto: CreateClassDto = req.body;
 
@@ -15,8 +16,8 @@ router.post('/', validateDto(CreateClassDto), async (req, res) => {
     res.status(response.statusCode).json(response);
 });
 
-router.get('/', async (req, res) => {
-    const userId = '';
+router.get('/', authorizationMiddleware, async (req, res) => {
+    const userId = req.userId!;
 
     const response = await TasksService.readAllByUserId(userId);
 

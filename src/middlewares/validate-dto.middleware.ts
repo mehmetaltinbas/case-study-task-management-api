@@ -21,10 +21,12 @@ export function validateDto(dtoClass: any) {
                 .map(error => `${error.field}: \n${error.errors.map(e => `* ${e}`).join('\n')}`)
                 .join('\n');
 
-            res.status(400).json({
+            const response: ResponseBase = {
                 isSuccess: false,
                 message: `input validation failed, problematic fields: \n${errorMessage}`,
-            } as ResponseBase);
+                statusCode: 400
+            };
+            res.status(response.statusCode).json(response);
             return;
         }
 
