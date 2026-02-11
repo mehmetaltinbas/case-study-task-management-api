@@ -1,3 +1,4 @@
+import { specs, swaggerUi } from '@/swagger.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -18,6 +19,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 async function loadControllers(): Promise<void> {
     const controllers = fs.readdirSync('./src/controllers');
