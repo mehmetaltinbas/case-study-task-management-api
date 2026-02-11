@@ -22,6 +22,7 @@ export class UsersService {
                     passwordHash
                 }
             });
+
             return { isSuccess: true, message: 'signed up', statusCode: 200 };
         } catch (error) {
             console.error(error);
