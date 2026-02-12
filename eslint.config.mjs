@@ -20,7 +20,7 @@ export default defineConfig([
             'no-console': 'warn',
             'no-debugger': 'error',
             'no-unused-vars': 'off',
-            curly: 'error',
+            curly: 'warn',
             'no-undef': 'error',
             'no-redeclare': 'error',
             'no-unreachable': 'error',

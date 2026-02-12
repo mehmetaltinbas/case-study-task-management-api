@@ -1,9 +1,9 @@
 import { specs, swaggerUi } from '@/swagger.js';
+import { loadControllers } from '@/utils/load-controllers.util.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import fs from 'fs';
 import './keep-alive.js';
 
 dotenv.config();
@@ -21,23 +21,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-async function loadControllers(): Promise<void> {
-    const controllers = fs.readdirSync('./src/controllers');
-    console.log('\nloading controllers...');
-    for (const controller of controllers) {
-        const route = controller.replace('.controller.ts', '').toLocaleLowerCase();
-        await import(`./controllers/${controller.replace('.ts', '.js')}`)
-            .then((controller) => {
-                app.use(`/${route}`, controller.default);
-                console.log(`loaded controller: ${route}`);
-            })
-            .catch((err) => console.error(`\n\tError loading the controller ${controller}\n`, err));
-    }
-    console.log('');
-}
-
 void (async (): Promise<void> => {
-    await loadControllers();
+    await loadControllers(app);
+
     app.listen(port, () => {
         console.log(`App listening on port: ${port}`);
     });
