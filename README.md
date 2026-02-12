@@ -54,6 +54,10 @@ Uygulamanın kapsamı daha büyük olsaydı feature-based bir yapı (features/us
 
 # Unit Tests
 
+Öncelikle test db'yi ayrı tutmak adına docker-compose ile local bir test db kurdum.
+npm test scriptler'i dotenv-cli kullanarak test db'nin connection string'ini içeren .test.env ile test scriptleri çalışıyor.
+Tüm testlerden test/setup.ts içerisinde önce test db tamamen temizleniyor.
+
 # Dockerfile
 
 Uygulamayı Dockerfile ile Docker Image'u oluşturup, bu Image'i Docker Hub hesabıma push edip, oradan da bu Image'i kullanarak Render'a deploy ettim.
