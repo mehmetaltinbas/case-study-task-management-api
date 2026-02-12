@@ -3,12 +3,15 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "start": "npm run build && node dist/index.js",
+        "start": "npm run build && node dist/src/index.js",
         "dev": "tsx watch --env-file=.env src/index.ts",
         "build": "npx prisma generate && tsc && tsc-alias",
         "format": "npx prettier . --write",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "prisma:push": "npx prisma db push"
+        "prisma:push": "npx prisma db push",
+        "docker:build": "docker build --platform linux/amd64 -t altnbsmehmet/case-study-task-management-api .",
+        "docker:push": "docker push altnbsmehmet/case-study-task-management-api:latest",
+        "docker:build-push": "npm run docker:build && npm run docker:push"
     },
     "author": "Mehmet Altınbaş",
     "license": "ISC",
