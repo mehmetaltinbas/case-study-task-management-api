@@ -1,26 +1,25 @@
 import dotenv from 'dotenv';
-import http from 'http';
-import https from 'https';
 
 dotenv.config();
 
-const protocol = process.env.NODE_ENV === 'production' ? https : http;
+const API_URL = process.env.API_URL;
 
-setInterval(
-    () => {
-        protocol
-            .get(`${process.env.API_URL}/keep-alive`, (res) => {
-                if (res.statusCode === 200) {
-                    console.log(`[keep-alive] success: API is alive at ${new Date().toISOString()}`);
-                } else {
-                    console.log(
-                        `[keep-alive] failed: API returned status ${res.statusCode} at ${new Date().toISOString()}`
-                    );
-                }
-            })
-            .on('error', (e) => {
-                console.error(`[keep-alive] error: ${e} at ${new Date().toISOString()}`);
-            });
-    },
-    12 * 60 * 1000
-);
+if (!API_URL) {
+    console.warn('[keep-alive] No API_URL found in environment variables.');
+} else {
+    setInterval(async () => {
+        try {
+            const response = await fetch(`${API_URL}/keep-alive`);
+
+            const timestamp = new Date().toISOString();
+
+            if (response.ok) {
+                console.log(`[keep-alive] success: API is alive at ${timestamp}`);
+            } else {
+                console.log(`[keep-alive] failed: status ${response.status} at ${timestamp}`);
+            }
+        } catch (e) {
+            console.error(`[keep-alive] error: ${e instanceof Error ? e.message : e} at ${new Date().toISOString()}`);
+        }
+    }, 12 * 60 * 1000);
+}
