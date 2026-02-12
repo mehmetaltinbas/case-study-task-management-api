@@ -11,8 +11,8 @@ userName alanını unique olarak işaretledim.
 signUp ve updateById servis methodları userName benzersizliğini kontrol ediyor.
 
 Task
-title alanı unique string olarak, isCompleted alanı ise boolean olarak belirlendi.
-title alanı yine User modelinin userName benzersizliğinde olduğu gibi TasksService'in create ve updateById servis methodlarında benzersizliği kontrol ediliyor.
+title alanı userId ile birlikte unique string olarak, isCompleted alanı ise boolean olarak belirlendi.
+title alanı userId ile birlikte TasksService'in create ve updateById servis methodlarında benzersizliği kontrol ediliyor.
 Proje gereksinimlerinde completed yazıyordu fakat projelerimde her zaman boolean değerleri 'is' prefix ile isimlendirdim, burada da öyle kullanmak istedim.
 
 Relationship

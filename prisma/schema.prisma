@@ -25,9 +25,11 @@ model Task {
     user   User   @relation(fields: [userId], references: [id])
     userId String
 
-    title       String  @unique
+    title       String
     isCompleted Boolean
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@unique([title, userId])
 }
