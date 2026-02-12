@@ -1,4 +1,4 @@
-import { authorizationMiddleware } from '@/middlewares/auth.middleware';
+import { authorizationMiddleware } from '@/middlewares/authorization.middleware';
 import { validateDto } from '@/middlewares/validate-dto.middleware';
 import { TasksService } from '@/services/tasks.service';
 import { CreateTaskDto } from '@/types/dto/tasks/create-task.dto';

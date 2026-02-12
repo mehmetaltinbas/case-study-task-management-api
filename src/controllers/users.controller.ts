@@ -1,5 +1,5 @@
 import { jwtCookieSettings } from '@/constants/jwt-cookie-settings.constant';
-import { authorizationMiddleware } from '@/middlewares/auth.middleware';
+import { authorizationMiddleware } from '@/middlewares/authorization.middleware';
 import { validateDto } from '@/middlewares/validate-dto.middleware';
 import { UsersService } from '@/services/users.service';
 import { SignInUserDto } from '@/types/dto/users/sign-in-user.dto';
