@@ -2,7 +2,7 @@ import { CreateTaskDto } from '@/types/dto/tasks/create-task.dto';
 import { UpdateTaskDto } from '@/types/dto/tasks/update-task.dto';
 import { ResponseBase } from '@/types/response/response-base.response';
 import { ReadMultipleTasksResponse } from '@/types/response/tasks/read-multiple-tasks.response';
-import { prisma } from 'prisma/prisma-client';
+import { prisma } from '../../prisma/prisma-client';
 
 export class TasksService {
     private constructor() {}

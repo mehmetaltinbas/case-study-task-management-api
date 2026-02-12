@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  test-db:
+    image: postgres:16-alpine
+    container_name: case-study-task-management-api-test-db
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpassword
+      POSTGRES_DB: testdb
+    ports:
+      - "5532:5432"
+    volumes:
+      - test-db-data:/var/lib/postgresql/data
+
+volumes:
+  test-db-data:

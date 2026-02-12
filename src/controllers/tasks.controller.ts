@@ -159,8 +159,6 @@ router.get('/', authorizationMiddleware, async (req, res) => {
  *                   type: string
  *                 statusCode:
  *                   type: integer
- *      200:
- *          description: no tasks found for this user (if user don't have any task)
  *       401:
  *         description: unauthorized
  *       404:
