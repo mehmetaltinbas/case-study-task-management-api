@@ -93,3 +93,12 @@ API dokümantasyonu swagger commentler'i ile oluşturuldu.
 # Canlı
 
 API Domain: https://case-study-task-management-api-latest.onrender.com
+
+# AI'dan Yardım Aldığım Yerler
+
+- middlewareleri yazarken
+- test setup yaparken
+- Dockerfile
+- swagger setup
+
+Kalan her şey daha önce uyguladığım ve hiç zorlanmadığım noktalar.
