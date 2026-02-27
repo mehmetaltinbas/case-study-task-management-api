@@ -1,104 +1,78 @@
-# Database ve ORM
+# Database and ORM
 
-Veriyi depolamak için Prisma ORM ile birlikte PostgreSQL database kullandım.
-
-PostgreSQL serveri Supabase'de deploy edili.
+I used a **PostgreSQL** database with **Prisma ORM** for data storage. The PostgreSQL server is deployed on **Supabase**.
 
 # Database Schema
 
 ### User
-
-- Proje gereksinimlerinde yoktu fakat her uygulamanın olmazsa olmazı kullanıcı bazlı işlemleri de dahil etmek istedim.
-- userName alanını unique olarak işaretledim.
-- signUp ve updateById servis methodları userName benzersizliğini kontrol ediyor.
+- Although not in the initial requirements, I included user-based operations as an essential part of the application.
+- The `userName` field is marked as **unique**.
+- The `signUp` and `updateById` service methods verify the uniqueness of the `userName`.
 
 ### Task
-
-- title alanı userId ile birlikte unique string olarak, isCompleted alanı ise boolean olarak belirlendi.
-- title alanı userId ile birlikte TasksService'in create ve updateById servis methodlarında benzersizliği kontrol ediliyor.
-- Proje gereksinimlerinde completed yazıyordu fakat projelerimde her zaman boolean değerleri 'is' prefix ile isimlendirdim, burada da öyle kullanmak istedim.
+- The `title` field is defined as a unique string in combination with `userId`.
+- The `isCompleted` field is a boolean.
+- The `TasksService` methods (`create` and `updateById`) verify the uniqueness of the title for each user.
+- I used the `is` prefix for boolean naming (`isCompleted`) to maintain my personal coding standards.
 
 ### Relationship
-
-- Users ve Tasks modelleri arasında one-to-many ilişkisi var, 1 kullanıcı birden fazla Task'a sahip olabilir ve aynı zamanda bir Task yalnızca 1 kullanıcıya ait olabilir.
+- There is a **one-to-many** relationship between Users and Tasks: one user can have multiple tasks, but each task belongs to only one user.
 
 # Routing
 
-Oluşturduğum controller yapısına göre index.ts controllers/ klasörü içindeki tüm dosyaları .controllers.ts suffix'i olanları filtreleyelerek okuyor ve bu suffix'i çıkartarak baştaki kalan kısmı o controllerdaki tüm methodların URL route başlangıcı yapıyor.
-
-Bu sayede her bir controller için ekstra bir import'a gerek kalmıyor.
+The routing logic is automated via `index.ts`. It scans the `controllers/` folder, filters files with the `.controllers.ts` suffix, and automatically sets the filename prefix as the base URL route for all methods within that controller. This eliminates the need for manual imports for every new controller.
 
 # DTO & validateDtoMiddleware
 
-DTO modeller için interface yerine class-validator decoratorlar'ı ile birlikte class tanımlamaları kullandım.
-
-Bunun yanında da middleware kullanınca, kullanıcı input doğrulama işini iş mantığından tamamen ayırabiliyoruz.
-
-Gerekli doğrulamalar için DTO sınıflarındaki alanları decoratorlar ile işaretlenmesi yetiyor ve geri kalan tüm doğrulama işini validateDtoMiddleware üstleniyor.
-
-Eğer ki forma uymayan bir değer var ise validateDtoMiddleware uygun şekilde cevap dönüyor 400 status code'u ile ve istek hiç route'a ulaşamıyor.
-
-Route tanımlanırken validateDtoMiddleware'in ilk argünamına doğrulanacak class DTO verilmesi yeterli.
+- I used **classes** with **class-validator** decorators for DTO models instead of interfaces.
+- By using `validateDtoMiddleware`, I successfully decoupled input validation from the core business logic.
+- If an input fails validation, the middleware returns a **400 status code**, preventing the request from reaching the route handler.
 
 # Response
 
-Tüm response interface'leri ResponseBase interface'ini extend etmek zorunda.
-
-ResponseBase ise her cevabın olmazsa olmazları isSuccess, message ve statusCode alanlarını içeriyor.
+All response interfaces extend a `ResponseBase` interface, ensuring every response consistently contains `isSuccess`, `message`, and `statusCode`.
 
 # authorizationMiddleware
 
-Korunmak istenen routelar'da kullanıcı doğrulama için yazılmış middleware.
-
-Gelen istekteki http only jwt cookie'i alarak doğrulama yapıyor.
-
-Eğer kullanıcı doğrulanamazsa 401 status code'u ile cevap dönülüyor ve istek hiç route'a ulaşamıyor.
+This middleware handles authentication for protected routes. It verifies the **HTTP-only JWT cookie** from the request. If the user is not authorized, it returns a **401 status code**.
 
 # Error Handling
 
-İş mantığı içerisinde hata yönetimi try-catch blokları ile sağlanıyor.
-
-Eğer bir hata fırlar ise catch içerisinde yakalanıp konsole error log ediliyor ve 500 status code'u ile "internal server error" mesajı dönülüyor.
+Business logic errors are managed using **try-catch** blocks. If an error occurs, it is logged to the console, and a **500 status code** with an "internal server error" message is returned.
 
 # Folder Structure
 
-Uygulamanın kapsamı küçük olduğundan klasör yapısı layere-based (controllers, services, types...).
-
-Uygulamanın kapsamı daha büyük olsaydı feature-based bir yapı (features/users, features/tasks) kullanılabilirdi.
+Given the small scope of the app, I used a **layer-based** structure (controllers, services, types). For larger applications, I would typically use a **feature-based** structure (e.g., `features/users`, `features/tasks`).
 
 # Unit Tests
 
-Öncelikle test db'yi ayrı tutmak adına docker-compose ile local bir test db kurdum.
+- I used **Docker Compose** to set up a local test database to keep it separate from development.
+- Test scripts use `dotenv-cli` to load `.test.env` containing the test database connection string.
+- In `test/setup.ts`, the database is cleared within the `beforeEach` scope, providing an isolated environment for every test.
+- Unit tests cover `TasksService.create` and `TasksService.readAllByUserId`, focusing on edge cases and various logical scenarios.
 
-npm test scriptler'i dotenv-cli kullanarak test db'nin connection string'ini içeren .test.env ile test scriptleri çalışıyor.
+# Docker & Deployment
 
-Tüm testlerin her biri çalışmadan önce test/setup.ts içerisinde beforeEach scope altında test db tamamen temizleniyor bu sayede her bir testin kendi izole çalışma alanı oluyor (unit testing).
+I created a **Dockerfile** to build the image, pushed it to **Docker Hub**, and deployed it to **Render**.
 
-Unit testleri yalnızca TasksService.create ve TasksService.readAllByUserId için yazdım.
-
-Bu testleri yazarken dikkat ettiğim şey tüm edge caseleri ve tüm olasılık senaryolarını kapsayabilmek.
-
-# Dockerfile
-
-Uygulamayı Dockerfile ile Docker Image'u oluşturup, bu Image'i Docker Hub hesabıma push edip, oradan da bu Image'i kullanarak Render'a deploy ettim.
-
-Docker Image: https://hub.docker.com/r/altnbsmehmet/case-study-task-management-api
+**Docker Image:** [altnbsmehmet/case-study-task-management-api](https://hub.docker.com/r/altnbsmehmet/case-study-task-management-api)
 
 # Swagger
 
-API dokümantasyonu swagger commentler'i ile oluşturuldu.
+API documentation was generated using **Swagger** comments.
 
---> https://case-study-task-management-api-latest.onrender.com/api-docs
+**Docs:** [View Swagger UI](https://case-study-task-management-api-latest.onrender.com/api-docs)
 
-# Canlı
+# Live Demo
 
-API Domain: https://case-study-task-management-api-latest.onrender.com
+**API Domain:** [https://case-study-task-management-api-latest.onrender.com](https://case-study-task-management-api-latest.onrender.com)
 
-# AI'dan Yardım Aldığım Yerler
+# AI Usage Disclosure
 
-- middlewareleri yazarken
-- test setup yaparken
-- Dockerfile
-- swagger setup
+I utilized AI for assistance with:
+- Writing middlewares
+- Unit test setup
+- Dockerfile configuration
+- Swagger setup
 
-Kalan her şey daha önce uyguladığım ve hiç zorlanmadığım noktalar.
+All other components were implemented based on my existing experience.
