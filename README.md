@@ -76,3 +76,12 @@ I utilized AI for assistance with:
 - Swagger setup
 
 All other components were implemented based on my existing experience.
+
+# ENV Variables
+DATABASE_URL=
+
+API_URL=
+
+JWT_SECRET=
+JWT_EXPIRES_IN= # zeit/ms format: s=seconds, m=minutes, h=hours, d=days
+
